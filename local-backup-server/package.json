@@ -1,5 +1,5 @@
 {
-  "name": "local-driver",
+  "name": "local-backup-server",
   "version": "1.0.0",
   "description": "local driver auto sync",
   "main": "index.js",
