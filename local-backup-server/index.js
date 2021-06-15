@@ -2,8 +2,10 @@ require("dotenv").config();
 
 const express = require("express");
 const multer = require("multer");
-const { writeFile, rename } = require("fs").promises;
-const { connectDb, models } = require("./models");
+const { rename } = require("fs").promises;
+const { connectDb } = require("./models");
+// const { generateKey } = require("./utils/device.util");
+const { createDevice, checkMessage } = require("./services/device.service");
 
 const upload = multer({ dest: process.env.BASE_DIR });
 const app = express();
@@ -24,18 +26,32 @@ app.post("/upload", upload.any(), (req, res) => {
 
 app.get("/register", async (req, res) => {
   const { name } = req.query
-  const dev = new models.Device({
-    name,
-    key: "test key",
-    lastSync: Date.now(),
-    dir: `${process.env.BASE_DIR}/${name}`,
-    serverMessage: "test sm",
-    clientMessage: "test cm"
-  })
+  if (!name) {
+    res.sendStatus(400);
+    return;
+  }
 
-  await dev.save()
-  res.status(201).send(dev)
-})
+  const device = await createDevice(name);
+
+  res.status(201).send(device);
+});
+
+app.get("/login", async (req, res) => {
+  const { id, message } = req.query;
+  if (!id || !message) {
+    res.sendStatus(400);
+    return;
+  }
+  const device = await checkMessage(id, message);
+  if (!device) {
+    return res.sendStatus(403);
+  }
+  const jwt = "12345asdasd.asdasfa.adfasdf" //TODO await generateJwt();
+  //TODO send response with message and token
+  //TODO caldulate server message
+  const serverMessage = "12312412412";
+  res.send({ serverMessage, jwt });
+});
 
 const port = process.env.PORT || 3000;
 connectDb().then(() => {
