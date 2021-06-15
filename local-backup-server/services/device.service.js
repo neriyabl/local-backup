@@ -12,13 +12,13 @@ const createDevice = async (name) => {
   });
 
   console.log("need to update real save");
-  // await device.save();
+  await device.save();
   return device;
 }
 
 const getDevice = async (id) => {
   try{
-    return Device.findById(id).exec();
+    return await Device.findById(id).exec();
   } catch {
     console.error(`fail to get device: ${id}`);
     return;
