@@ -4,7 +4,6 @@ const express = require("express");
 const multer = require("multer");
 const { rename } = require("fs").promises;
 const { connectDb } = require("./models");
-// const { generateKey } = require("./utils/device.util");
 const { createDevice, checkMessage } = require("./services/device.service");
 
 const upload = multer({ dest: process.env.BASE_DIR });

@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const deviceSchema = new mongoose.Schema(
   {
     name: String,
-    key: String,
+    key: Buffer,
     lastSync: Date,
     dir: String,
-    serverMessage: String,
-    clientMessage: String
+    serverMessage: Buffer,
+    clientMessage: Buffer
   }
 );
 
