@@ -5,6 +5,7 @@ const multer = require("multer");
 const { rename } = require("fs").promises;
 const { connectDb } = require("./models");
 const { createDevice, checkMessage } = require("./services/device.service");
+const { auth } = require("./middlewares/auth.midleware");
 
 const upload = multer({ dest: process.env.BASE_DIR });
 const app = express();
@@ -13,7 +14,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/upload", upload.any(), (req, res) => {
+app.post("/upload", auth, upload.any(), (req, res) => {
   const files = req.files;
   if (files) {
     files.forEach((file) => {
